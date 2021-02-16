@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { typeOrmConfig } from './auth/config/typeorm.config';
 import { ImagesModule } from './images/images.module';
+import { AppController } from './app.controller';
+import { KakaoLogin } from './app.service';
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { ImagesModule } from './images/images.module';
     AuthModule,
     ImagesModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [KakaoLogin],
 })
 export class AppModule {}
