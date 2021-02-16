@@ -2,7 +2,7 @@ import { ConflictException, InternalServerErrorException } from '@nestjs/common'
 import { EntityRepository, Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { User } from './user.entity';
-import { SignInDto, SignUpDto } from '../dto/auth-credentials.dto';
+import { SignInDto, AuthDto } from '../dto/auth-credentials.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -10,7 +10,7 @@ export class UserRepository extends Repository<User> {
     return await bcrypt.hash(password, salt);
   }
 
-  async signUp(signUpDto: SignUpDto): Promise<void> {
+  async signUp(signUpDto: AuthDto): Promise<void> {
     const { username, password, nickname } = signUpDto;
 
     const user = new User();

@@ -14,8 +14,8 @@ export class User extends BaseEntity {
   @Column()
   nickname: string;
 
-  @Column()
   @Exclude()
+  @Column()
   password: string;
 
   @Column()
