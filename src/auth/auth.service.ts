@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SignInDto, AuthDto, UpdateUserDto } from './dto/auth-credentials.dto';
+import { SignInDto, AuthDto, UpdatePasswordDto } from './dto/auth-credentials.dto';
 import { JwtPayload } from './jwt/jwt-payload.interface';
 import { User } from './user/user.entity';
 import { UserRepository } from './user/user.repository';
@@ -31,10 +31,15 @@ export class AuthService {
     return { accessToken };
   }
 
-  async update(id: number, updateNickname: string): Promise<User> {
-    const user = await this.userRepository.findOne(id);
+  async updateNickname(updateUser: User, updateNickname: string): Promise<User> {
+    const user = await this.userRepository.findOne({ id: updateUser.id });
+    delete user.password;
     user.nickname = updateNickname;
 
     return await this.userRepository.save(user);
+  }
+
+  async updatePassword(updateUser: User, updatePasswordDto: UpdatePasswordDto): Promise<void> {
+    return await this.userRepository.updatePassword(updateUser, updatePasswordDto);
   }
 }

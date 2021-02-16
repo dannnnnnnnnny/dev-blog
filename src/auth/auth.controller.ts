@@ -2,7 +2,7 @@ import { Body, Controller, Patch, Post, UseGuards, ValidationPipe } from '@nestj
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { GetUser } from './decorators/get-user.decorator';
-import { SignInDto, AuthDto, UpdateUserDto } from './dto/auth-credentials.dto';
+import { SignInDto, AuthDto, UpdatePasswordDto } from './dto/auth-credentials.dto';
 import { User } from './user/user.entity';
 
 @Controller('auth')
@@ -19,9 +19,15 @@ export class AuthController {
     return await this.authService.signIn(signInDto);
   }
 
-  @Patch('')
+  @Patch('nickname')
   @UseGuards(AuthGuard())
-  async update(@GetUser('id') userId: number, @Body('nickname') updateNickname: string): Promise<User> {
-    return await this.authService.update(userId, updateNickname);
+  async updateNickname(@GetUser() updateUser: User, @Body('nickname') updateNickname: string): Promise<User> {
+    return await this.authService.updateNickname(updateUser, updateNickname);
+  }
+
+  @Patch('password')
+  @UseGuards(AuthGuard())
+  async updatePassoword(@GetUser() updateUser: User, @Body() updatePasswordDto: UpdatePasswordDto): Promise<void> {
+    return this.authService.updatePassword(updateUser, updatePasswordDto);
   }
 }

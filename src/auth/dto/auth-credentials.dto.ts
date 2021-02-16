@@ -8,12 +8,15 @@ export class SignInDto {
   password: string;
 }
 
-export class UpdateUserDto {
+export class AuthDto extends SignInDto {
   @IsString()
   nickname: string;
 }
 
-export class AuthDto extends SignInDto {
+export class UpdatePasswordDto {
   @IsString()
-  nickname: string;
+  password: string;
+
+  @IsString()
+  update: string;
 }

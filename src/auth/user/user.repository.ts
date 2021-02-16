@@ -1,8 +1,8 @@
-import { ConflictException, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { User } from './user.entity';
-import { SignInDto, AuthDto } from '../dto/auth-credentials.dto';
+import { SignInDto, AuthDto, UpdatePasswordDto } from '../dto/auth-credentials.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -37,6 +37,18 @@ export class UserRepository extends Repository<User> {
       return user.username;
     } else {
       return null;
+    }
+  }
+
+  async updatePassword(updateUser: User, updatePasswordDto: UpdatePasswordDto): Promise<void> {
+    const { password, update } = updatePasswordDto;
+
+    const user = await this.findOne({ id: updateUser.id });
+    if (await user.validatePassword(password)) {
+      user.password = await this.hashPassword(update, user.salt);
+      await user.save();
+    } else {
+      throw new BadRequestException('Passwords do not match.');
     }
   }
 }
