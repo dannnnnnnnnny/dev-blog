@@ -11,9 +11,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/utils/file-upload.utils';
 
+@ApiTags('images')
 @Controller('images')
 export class ImagesController {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
