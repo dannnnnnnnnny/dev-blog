@@ -3,6 +3,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { User } from './user.entity';
 import { SignInDto, AuthDto, UpdatePasswordDto } from '../dto/auth-credentials.dto';
+import { UserResponseMessage } from '../dto/user-res-message.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -10,7 +11,7 @@ export class UserRepository extends Repository<User> {
     return await bcrypt.hash(password, salt);
   }
 
-  async signUp(signUpDto: AuthDto): Promise<void> {
+  async signUp(signUpDto: AuthDto): Promise<UserResponseMessage> {
     const { username, password, nickname } = signUpDto;
 
     const user = new User();
@@ -21,6 +22,10 @@ export class UserRepository extends Repository<User> {
 
     try {
       await user.save();
+      const message: UserResponseMessage = {
+        message: 'signup has been successful.',
+      };
+      return message;
     } catch (error) {
       if (error.code == 'ER_DUP_ENTRY') {
         throw new ConflictException('username already exists');
@@ -40,13 +45,17 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  async updatePassword(updateUser: User, updatePasswordDto: UpdatePasswordDto): Promise<void> {
+  async updatePassword(updateUser: User, updatePasswordDto: UpdatePasswordDto): Promise<UserResponseMessage> {
     const { password, update } = updatePasswordDto;
 
     const user = await this.findOne({ id: updateUser.id });
     if (await user.validatePassword(password)) {
       user.password = await this.hashPassword(update, user.salt);
       await user.save();
+      const message: UserResponseMessage = {
+        message: 'Password change successful',
+      };
+      return message;
     } else {
       throw new BadRequestException('Passwords do not match.');
     }

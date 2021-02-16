@@ -1,6 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcryptjs';
+import { IsEmail } from 'class-validator';
 
 @Entity()
 @Unique(['username'])
@@ -9,6 +10,7 @@ export class User extends BaseEntity {
   id: number;
 
   @Column()
+  @IsEmail()
   username: string;
 
   @Column()
