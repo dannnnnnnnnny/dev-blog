@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { GetUser } from './decorators/get-user.decorator';
@@ -29,5 +29,11 @@ export class AuthController {
   @UseGuards(AuthGuard())
   async updatePassoword(@GetUser() updateUser: User, @Body() updatePasswordDto: UpdatePasswordDto): Promise<void> {
     return this.authService.updatePassword(updateUser, updatePasswordDto);
+  }
+
+  @Delete('')
+  @UseGuards(AuthGuard())
+  async deleteUser(@GetUser() deleteUser: User): Promise<void> {
+    return this.authService.deleteUser(deleteUser);
   }
 }

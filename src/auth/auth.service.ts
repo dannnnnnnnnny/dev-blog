@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult } from 'typeorm';
 import { SignInDto, AuthDto, UpdatePasswordDto } from './dto/auth-credentials.dto';
 import { JwtPayload } from './jwt/jwt-payload.interface';
 import { User } from './user/user.entity';
@@ -41,5 +42,9 @@ export class AuthService {
 
   async updatePassword(updateUser: User, updatePasswordDto: UpdatePasswordDto): Promise<void> {
     return await this.userRepository.updatePassword(updateUser, updatePasswordDto);
+  }
+
+  async deleteUser(deleteUser: User): Promise<void> {
+    await this.userRepository.delete({ id: deleteUser.id });
   }
 }
