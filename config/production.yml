@@ -1,0 +1,11 @@
+server:
+  origin: 
+
+db:
+  host: ''
+  username: ''
+  password: ''
+  synchronize: false
+
+jwt:
+  secret: 'topSecret51'
