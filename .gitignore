@@ -3,6 +3,7 @@
 /node_modules
 /uploads
 /config
+aws-nestjs.pem
 
 # Logs
 logs
